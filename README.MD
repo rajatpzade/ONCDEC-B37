@@ -155,7 +155,7 @@ Together, they deliver software **faster, safer, and more efficiently**.
 
 # **The Strategic Imperative of DevOps**
 
-## Day-📌 Overview
+## Day-2 📌 Overview
 This module explains why DevOps has become essential for modern IT, the importance of Linux and AWS, and the growing career opportunities in DevOps.
 
 ---
