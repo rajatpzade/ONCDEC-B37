@@ -4,6 +4,7 @@
 DevOps is a combination of **Development (Dev)** and **Operations (Ops)**.  
 It focuses on collaboration, automation, and delivering software faster and more reliably.
 
+![Alt Text](img/e404c522-8c6c-429a-b226-f8c98b9c3948.gif)
 ---
 
 ## 🚀 What is DevOps?
@@ -154,7 +155,7 @@ Together, they deliver software **faster, safer, and more efficiently**.
 
 # **The Strategic Imperative of DevOps**
 
-## Day-02📌 Overview
+## Day-📌 Overview
 This module explains why DevOps has become essential for modern IT, the importance of Linux and AWS, and the growing career opportunities in DevOps.
 
 ---
