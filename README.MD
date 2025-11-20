@@ -308,6 +308,124 @@ By the end of this program, students will:
 - Become job-ready for DevOps roles  
 
 ---
+## Day-3 📌 Getting Started with Operating Systems
+An **Operating System (OS)** is system software that manages hardware resources and allows applications to run smoothly.
+
+---
+
+## 🧠 Why Do We Need an OS?
+- Manages CPU, RAM, Disk
+- Runs applications
+- Controls hardware
+- Provides security
+- Handles users & permissions
+- Provides GUI & CLI
+
+---
+
+## 🖥️ Different Types of Operating Systems
+- Batch OS
+- Time-Sharing OS
+- Distributed OS
+- Network OS
+- Mobile OS
+- Embedded OS
+- Real-Time OS (RTOS)
+
+---
+
+## 🌍 How Operating Systems Impact Daily Life
+Operating systems power:
+- Laptops & Desktops
+- Mobile phones
+- ATMs
+- Smart TVs
+- Cars
+- Servers
+- Cloud platforms
+- IoT devices
+
+**Every digital service uses an OS.**
+
+---
+
+## ⚔️ Windows vs Unix vs Linux
+| Feature | Windows | Unix | Linux |
+|--------|---------|------|--------|
+| Type | Closed Source | Proprietary | Open Source |
+| Cost | Paid | Paid | Free |
+| Security | Medium | High | Very High |
+| Interface | GUI | CLI | CLI + GUI |
+| Usage | Personal Use | Enterprise Servers | DevOps, Cloud |
+| Customization | Low | Low | Very High |
+
+---
+
+## 🏛️ Ownership and Origin
+| OS | Owner | Year |
+|----|--------|------|
+| Windows | Microsoft | 1985 |
+| Unix | AT&T Bell Labs | 1969 |
+| Linux | Linus Torvalds | 1991 |
+
+---
+
+## 💰 Cost and Licensing
+- **Windows** → Paid
+- **Unix** → Expensive
+- **Linux** → Free and open-source
+
+---
+
+## 🔐 Security and Privacy
+- Windows → More prone to malware
+- Unix → Very strong permissions
+- Linux → Highly secure and stable
+
+---
+
+## 🖥️ User Interface
+- Windows → GUI
+- Unix → CLI
+- Linux → CLI + Optional GUI
+
+---
+
+## 🏢 What is a Server?
+A **server** is a powerful computer that provides services to clients (web, database, files, applications).
+
+---
+
+## 🖥️ Desktop OS vs Server OS
+| Feature | Desktop OS | Server OS |
+|--------|------------|------------|
+| Purpose | Personal use | Hosting applications |
+| GUI | Yes | Optional |
+| Performance | Normal | High |
+| Users | 1 user | Many clients |
+| Examples | Windows 10, Ubuntu Desktop | RHEL, Ubuntu Server |
+
+---
+
+## 🐧 Introduction to Linux
+Linux is an **open-source operating system kernel** widely used in DevOps, Cloud, and Servers.
+
+### Why Linux for DevOps?
+- Strong CLI
+- Secure & stable
+- Lightweight
+- Server-friendly
+- Used in AWS, Docker, Kubernetes
+
+---
+
+## 🏗️ Architecture of Linux
+Linux has five main layers:
+- Hardware
+- Kernel
+- System Libraries
+- System Utilities
+- User Applications
 
 
 
