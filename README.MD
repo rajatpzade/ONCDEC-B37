@@ -423,8 +423,7 @@ Linux is an **open-source operating system kernel** widely used in DevOps, Cloud
 Linux has five main layers:
 - Hardware
 - Kernel
-- System Libraries
-- System Utilities
+- shell 
 - User Applications
 
 
