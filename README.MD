@@ -426,5 +426,100 @@ Linux has five main layers:
 - shell 
 - User Applications
 
+## Day-3 📌 Understanding the Linux Command Prompt
+The **Linux command prompt** is where you type commands to interact with the operating system.  
+It is the most powerful tool for DevOps engineers.
+
+---
+
+## 🧩 Decoding the Structure of the Command Prompt
+A typical Linux prompt looks like this:
+
+``
+username@hostname:~$
+``
+
+
+**Breakdown:**
+- `username` → Current logged-in user  
+- `@` → Separator  
+- `hostname` → System name  
+- `:` → Separator  
+- `~` → Current directory (home directory)  
+- `$` → Normal user prompt (`#` for root user)
+
+---
+
+## 🧭 Effective Command Prompt Usage: A Step-by-Step Guide
+- Identify your **user** and **location**  
+- Understand the **$** vs **#** prompt difference  
+- Use **TAB** for auto-completion  
+- Use **UP/DOWN arrows** to navigate history  
+- Use **CTRL + C** to stop running commands  
+- Use **clear** or **CTRL + L** to clean the screen  
+
+---
+
+## 🎨 Making the Command Prompt Your Own (Advanced Customization)
+You can customize your prompt by editing the PS1 variable.
+
+Example:
+
+`
+PS1="\u@\h:\w$ "
+`
+
+Meaning:  
+- `\u` → Username  
+- `\h` → Hostname  
+- `\w` → Working directory  
+
+*This topic is advanced; beginners can skip customization.*
+
+---
+
+## 🐧 Introduction to Linux Basic Commands
+Here are the most commonly used beginner commands:
+
+- `pwd` → Show current directory  
+- `ls` → List files  
+- `cd` → Change directory  
+- `clear` → Clear terminal  
+- `whoami` → Show current user  
+- `date` → Show current date and time  
+- `history` → Show command history  
+- `echo` → Print text  
+
+---
+
+## 🖥️ Getting Started with the Linux Terminal
+The **terminal** is the interface where you type commands.
+
+- GNOME Terminal  
+- XTerm  
+- Konsole  
+- macOS Terminal  
+- Windows WSL (for Linux on Windows)
+
+How to open terminal:
+- **Linux** → CTRL + ALT + T  
+- **Mac** → Spotlight → Terminal  
+- **Windows (WSL)** → wsl command  
+
+---
+
+## 🧾 Essential System Information Commands
+- `uname -a` → Complete system details  
+- `hostname` → Show system name  
+- `uptime` → System load & running time  
+- `date` → Current system date/time  
+- `df -h` → Disk usage  
+- `du -sh` → Size of a directory  
+- `free -h` → RAM usage  
+- `top` → Real-time processes  
+- `who` → Logged-in users  
+
+---
+
 
 
