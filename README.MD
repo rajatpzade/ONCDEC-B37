@@ -550,76 +550,79 @@ mkdir foldername
 mkdir -p a/b/c  
 
 ### 🔹 Creating Files
-touch file.txt  
-touch file1 file2 file3  
+`touch file.txt`
+
+`touch file1 file2 file3 ` 
 
 ### 🔹 Copying Files
-cp file1 file2  
-cp file.txt /path/location/  
-cp -r folder1 folder2  
+`cp file1 file2 `
+ 
+`cp file.txt /path/location/` 
+
+`cp -r folder1 folder2 `
 
 ### 🔹 Moving / Renaming Files
-mv oldname newname  
-mv file.txt /path/  
+`mv oldname newname`  
+`mv file.txt /path/ ` 
 
 ### 🔹 Deleting Files & Folders
-rm file.txt  
-rm -r foldername  
-rm -rf foldername   (⚠️ dangerous)  
+`rm file.txt ` 
+`rm -r foldername`  
+`rm -rf foldername`   (⚠️ dangerous)  
 
 ---
 
 ## 📝 Viewing and Editing Files
 
 ### 🔹 Viewing Content
-cat file.txt  
-less file.txt  
-head file.txt  
+`cat file.txt`  
+`less file.txt`  
+`head file.txt`  
 tail file.txt  
-tail -f file.txt   (live logs)  
+`tail -f file.txt `  (live logs)  
 
 ### 🔹 Editing Files
-nano file.txt  
-vi file.txt  
+`nano file.txt  `
+`vi file.txt  `
 
 ### 🔸 Example:
-cat /etc/os-release  
-head -20 logs.txt  
-tail -f /var/log/syslog  
-nano notes.txt  
+`cat /etc/os-release ` 
+`head -20 logs.txt`  
+`tail -f /var/log/syslog ` 
+`vim notes.txt ` 
 
 ---
 
 ## 📦 Copy, Move, and Delete Files (Practical Examples)
 
 ### 🔹 Copy Examples
-cp index.html index-backup.html  
-cp notes.txt /home/user/backup/  
-cp -r project project-copy  
+`cp index.html index-backup.html  `
+`cp notes.txt /home/user/backup/ ` 
+`cp -r project project-copy  `
 
 ### 🔹 Move / Rename Examples
-mv report.txt final-report.txt  
-mv script.sh /usr/local/bin/  
-mv *.txt documents/  
+`mv report.txt final-report.txt`  
+`mv script.sh /usr/local/bin/`  
+`mv *.txt documents/`  
 
 ### 🔹 Delete Examples
-rm temp.txt  
-rm -r old-backup  
-rm -rf /tmp/testfolder   (⚠️ irreversible)  
+`rm temp.txt  `
+`rm -r old-backup ` 
+`rm -rf /tmp/testfolder`   (⚠️ irreversible)  
 
 ---
 
 ## ⭐ Real-Time DevOps Scenarios
 
 ### Scenario 1: Create a project structure  
-mkdir -p project/{src,logs,configs}  
+`mkdir -p project/{src,logs,configs} ` 
 
 ### Scenario 2: Move a downloaded file  
-mv Downloads/file.sh project/scripts/  
+`mv Downloads/file.sh project/scripts/  `
 
 ### Scenario 3: Check logs while deployment  
-tail -20 /var/log/app.log  
+`tail -20 /var/log/app.log`  
 
 ### Scenario 4: Backup config before editing  
-cp nginx.conf nginx.conf.backup  
-nano nginx.conf  
+`cp nginx.conf nginx.conf.backup  `
+`vim nginx.conf ` 
