@@ -535,19 +535,25 @@ Linux file system ek tree structure jaisa hota hai, jiska root `/` hota hai.
 - `cd /path/location` → Go to specific path  
 
 ### 🔸 Example:
-pwd  
-ls -l  
-cd /etc  
-cd ..  
-cd ~  
+
+`pwd  `
+
+`ls -l  `
+
+`cd /etc  `
+
+`cd ..  `
+
+`cd ~  `
+
 
 ---
 
 ## 📁 File and Directory Management
 
 ### 🔹 Creating Directories
-mkdir foldername  
-mkdir -p a/b/c  
+`mkdir foldername  `
+`mkdir -p a/b/c  `
 
 ### 🔹 Creating Files
 `touch file.txt`
