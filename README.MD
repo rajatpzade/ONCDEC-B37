@@ -426,6 +426,25 @@ Linux has five main layers:
 - shell 
 - User Applications
 
+![Alt Text](img/Linux_arch.png)
+
+
+### Kernel : 
+    In simple terms, the Linux kernel is the core of the operating system that acts as a translator between software and hardware. It manages essential resources like the CPU and memory, and handles all communication, allowing applications to run without needing to know the specific details of the computer's hardware.  
+
+
+### Shell :
+```
+A Linux shell is a program that acts as an interface between the user and the operating system's core, known as the kernel
+```
+
+### Hardware :
+
+```
+ Linux hardware is any physical component of a computer, like the CPU, RAM, and storage drives, that the Linux operating system manages and interacts
+
+```
+
 ## Day-3 📌 Understanding the Linux Command Prompt
 The **Linux command prompt** is where you type commands to interact with the operating system.  
 It is the most powerful tool for DevOps engineers.
