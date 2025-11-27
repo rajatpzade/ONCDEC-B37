@@ -651,3 +651,115 @@ tail file.txt
 ### Scenario 4: Backup config before editing  
 `cp nginx.conf nginx.conf.backup  `
 `vim nginx.conf ` 
+
+
+## 🎯 The Significance of the Linux File System Hierarchy
+- Organizes files in a predictable structure  
+- Ensures security through permissions  
+- Makes automation easy  
+- Helps in troubleshooting logs, configs & binaries  
+- Every directory ka apna specific purpose hota hai  
+
+Example:  
+- Config files hamesha `/etc` me honge  
+- Logs hamesha `/var/log` me honge  
+- User data `/home` ke andar hoga  
+
+---
+
+## 📁 Inside the Linux Root Directory: What You Need to Know
+Root directory `/` ke andar bahut saare **top-level folders** hote hain.  
+Neeche unke important roles explain kiye gaye hain:
+
+| Directory | Meaning | Example Usage |
+|----------|---------|---------------|
+| `/` | Root directory (top of the filesystem) | All other directories start from `/` |
+| `/bin` | Essential user commands | ls, cp, mkdir |
+| `/sbin` | System administration commands | reboot, fdisk |
+| `/boot` | Bootloader files & kernel | vmlinuz, initrd.img |
+| `/dev` | Device files | /dev/sda, /dev/tty |
+| `/etc` | Configuration files | /etc/ssh/sshd_config |
+| `/home` | User home directories | /home/rajat |
+| `/lib` | Shared libraries for system | libc.so |
+| `/media` | Auto-mounted removable media | Pendrive → /media/usb |
+| `/mnt` | Temporary mount point | Mount external HDD |
+| `/opt` | Optional / third-party apps | Google Chrome, VMware |
+| `/proc` | Virtual kernel & process info | /proc/cpuinfo |
+| `/root` | Home directory of root user | /root/.ssh/ |
+| `/run` | Temporary runtime data (boot time) | /run/docker.pid |
+| `/srv` | Server-specific data | Web server data |
+| `/sys` | Kernel info & device management | /sys/class/net |
+| `/tmp` | Temporary files | Session cache |
+| `/usr` | User applications & binaries | /usr/bin/python3 |
+| `/var` | Variable files (logs, cache) | /var/log/syslog |
+ 
+
+---
+
+## 🗂️ Understanding the Functionality of Common Linux Directories
+
+### 🔹 `/bin`
+Essential user commands:  
+- `ls`  
+- `cp`  
+- `mv`  
+- `cat`  
+
+### 🔹 `/sbin`
+System-level commands (root privileges required):  
+- `shutdown`  
+- `reboot`  
+- `fdisk`  
+
+### 🔹 `/etc`
+Configuration files for applications & services:  
+- `nginx.conf`  
+- `fstab`  
+- `ssh/sshd_config`  
+
+### 🔹 `/home`
+User-specific data (your personal files, documents, downloads).
+
+### 🔹 `/var`
+Frequently changing data:  
+- `/var/log` → System logs (`syslog`, `auth.log`)  
+- `/var/www` → Web server files  
+
+### 🔹 `/tmp`
+Temporary files that auto-delete after reboot.
+
+### 🔹 `/usr`
+User-installed applications and their libraries:  
+- `/usr/bin`  
+- `/usr/sbin`  
+- `/usr/lib`
+
+### 🔹 `/dev`
+Device files representing hardware:  
+- `/dev/sda` → Hard disk  
+- `/dev/tty` → Terminal  
+
+---
+
+## ⌨️ Introduction to Linux Shortcuts: Boost Your Efficiency
+Linux terminal shortcuts productivity ko boost karte hain.
+
+### 🔹 Navigation Shortcuts
+- `CTRL + A` → Go to start of line  
+- `CTRL + E` → Go to end of line  
+- `CTRL + U` → Clear before cursor  
+- `CTRL + K` → Clear after cursor  
+
+### 🔹 Command Execution Shortcuts
+- `CTRL + C` → Stop running command  
+- `CTRL + L` → Clear terminal  
+- `UP ARROW` → Previous command  
+- `DOWN ARROW` → Next command  
+- `TAB` → Auto complete  
+
+### 🔹 Useful Command Examples
+```bash
+cd /var/log
+ls -l
+cat syslog
+sudo systemctl restart nginx
