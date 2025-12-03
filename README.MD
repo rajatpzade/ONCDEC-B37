@@ -763,3 +763,115 @@ cd /var/log
 ls -l
 cat syslog
 sudo systemctl restart nginx
+
+## 📘 Overview of Vim and its History
+**Vim** (Vi IMproved) ek powerful text editor hai jo Linux/Unix systems me built-in hota hai.  
+Vim ka base editor **vi** 1976 me bana tha, aur Vim ko 1991 me enhance kiya gaya.
+
+Vim ke features:
+- Extremely fast  
+- Keyboard-driven  
+- Used widely by DevOps, Linux admins, SRE  
+- Very powerful for editing config files  
+- Default editor for many Linux distros  
+
+---
+
+## 🎯 Basic Concepts: Modes in Vim
+Vim ke 4 major modes hote hain:
+
+### 🔹 1. Command Mode (Default Mode)
+- File ko navigate, copy, delete aur change karne ke commands isi mode me hoti hain.  
+- Jab aap Vim open karte ho → aap Command Mode me hote ho.
+
+### 🔹 2. Insert Mode
+- Text type karne ke liye.  
+- Enter using: `i`, `a`, `o`, `I`, `A`, `O`
+
+### 🔹 3. Visual Mode
+- Select text for copying, deleting, changing.  
+- Enter using: `v`, `V`, `CTRL + v`
+
+### 🔹 4. Execute/Ex Mode (Command-Line Mode)
+- File save, quit, replace, search commands.  
+- Enter using `:` (colon)
+
+---
+
+## 🧭 Basic Navigation in Command Mode
+Command mode me cursor ko move karne ke liye:
+
+- `h` → Move left  
+- `j` → Move down  
+- `k` → Move up  
+- `l` → Move right  
+
+### 🔹 Word-based navigation
+- `w` → Next word  
+- `b` → Previous word  
+- `e` → End of a word  
+
+### 🔹 Line navigation
+- `0` → Start of line  
+- `$` → End of line  
+
+### 🔹 File navigation
+- `gg` → Go to top  
+- `G` → Go to bottom  
+
+---
+
+## ✂️ Text Manipulation in Vim
+
+### 🔹 Delete
+- `x` → Delete a character  
+- `dd` → Delete a whole line  
+- `dw` → Delete a word  
+- `d$` → Delete till end of line  
+
+### 🔹 Copy (Yank)
+- `yy` → Copy a line  
+- `yw` → Copy a word  
+- `y$` → Copy till end of line  
+
+### 🔹 Paste
+- `p` → Paste after cursor  
+- `P` → Paste before cursor  
+
+### 🔹 Replace
+- `r` → Replace a single character  
+- `R` → Replace multiple characters (overwrite mode)
+
+---
+
+## ↩️ Undo and Redo
+- `u` → Undo  
+- `CTRL + r` → Redo  
+
+---
+
+## ✏️ Entering Insert Mode
+
+Insert mode enter karne ke tarike:
+
+- `i` → Insert at cursor  
+- `I` → Insert at start of line  
+- `a` → Append after cursor  
+- `A` → Append at end of line  
+- `o` → Open new line below  
+- `O` → Open new line above  
+
+---
+
+## 📝 Editing Text in Insert Mode
+
+Insert mode me:
+- Normal typing hoti hai  
+- Navigation kare bina text edit hota hai  
+- Backspace, delete, arrow keys work fine  
+
+Example:
+```bash
+i
+Hello DevOps Engineers!
+Esc
