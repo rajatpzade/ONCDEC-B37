@@ -740,6 +740,107 @@ Device files representing hardware:
 - `/dev/tty` → Terminal  
 
 ---
+# 📝 Vim Editor – Complete Guide for DevOps Students
+
+## 📘 Overview of Vim and Its History
+**Vim** (Vi IMproved) is a powerful, fast, and keyboard-focused text editor widely used in Linux environments.  
+It originated from the classic Unix editor **vi**, created in 1976, and Vim was introduced in 1991 with enhanced features.
+
+### ⭐ Why Vim?
+- Extremely lightweight  
+- Available by default in Linux/Unix servers  
+- Ideal for editing configuration files  
+- Fully keyboard-driven → faster productivity  
+- Trusted by system administrators and DevOps engineers  
+
+---
+
+# 🎯 Basic Concepts: Modes in Vim
+
+Vim operates using modes. Understanding them is essential.
+
+### 🔹 1. Command Mode (Default Mode)
+- Used for navigation, delete, copy, paste, and shortcuts  
+- You enter this mode by pressing `Esc`  
+
+### 🔹 2. Insert Mode
+- Used for typing and editing text  
+- Enter using: `i`, `I`, `a`, `A`, `o`, `O`
+
+### 🔹 3. Visual Mode
+- Used for selecting text  
+- Enter using: `v`, `V`, or `CTRL + v`
+
+### 🔹 4. Execute Mode (Command-Line Mode)
+- Used for saving, quitting, searching, replacing  
+- Enter using: `:`  
+
+---
+
+# 🧭 Basic Navigation in Command Mode
+
+### 🔹 Cursor Movement
+- `h` → Move left  
+- `j` → Move down  
+- `k` → Move up  
+- `l` → Move right  
+
+### 🔹 Word Navigation
+- `w` → Next word  
+- `b` → Previous word  
+- `e` → End of word  
+
+### 🔹 Line Navigation
+- `0` → Beginning of line  
+- `$` → End of line  
+
+### 🔹 File Navigation
+- `gg` → Go to top of file  
+- `G` → Go to bottom of file  
+
+---
+
+# ✂️ Text Manipulation in Command Mode
+
+### 🔹 Delete Operations
+- `x` → Delete a character  
+- `dd` → Delete a line  
+- `dw` → Delete a word  
+- `d$` → Delete to end of line  
+
+### 🔹 Copy (Yank)
+- `yy` → Copy a line  
+- `yw` → Copy a word  
+- `y$` → Copy to end of line  
+
+### 🔹 Paste
+- `p` → Paste after cursor  
+- `P` → Paste before cursor  
+
+### 🔹 Replace Text
+- `r` → Replace a single character  
+- `R` → Replace multiple characters continuously  
+
+---
+
+# ↩️ Undo and Redo
+- `u` → Undo last action  
+- `CTRL + r` → Redo undone change  
+
+---
+
+# ✏️ Entering Insert Mode
+
+Insert mode allows actual typing.
+
+### 🔹 Ways to Enter Insert Mode
+- `i` → Insert at cursor  
+- `I` → Insert at beginning of line  
+- `a` → Insert after cursor  
+- `A` → Insert at end of line  
+- `o` → Open new line below  
+- `O` → Open new line above  
+
 
 ## ⌨️ Introduction to Linux Shortcuts: Boost Your Efficiency
 Linux terminal shortcuts productivity ko boost karte hain.
@@ -757,15 +858,95 @@ Linux terminal shortcuts productivity ko boost karte hain.
 - `DOWN ARROW` → Next command  
 - `TAB` → Auto complete  
 
-### 🔹 Useful Command Examples
-```bash
-cd /var/log
-ls -l
-cat syslog
-sudo systemctl restart nginx
 
+## 📝 Editing Text in Insert Mode
 
+Inside insert mode:
+
+- You can type normally  
+- Arrow keys navigate text  
+- `Backspace` deletes previous character  
+- `CTRL + w` deletes previous word  
+- `CTRL + u` deletes entire line before cursor  
+
+---
+
+## 🚶 Navigating and Editing Inside Insert Mode
+
+- Arrow keys → Move cursor  
+- `CTRL + h` → Backspace  
+- `CTRL + w` → Delete previous word  
+- `CTRL + u` → Delete entire line  
+- `CTRL + t` → Increase indent  
+- `CTRL + d` → Decrease indent  
+
+---
+
+## 🚪 Exiting Insert Mode
+
+Press `Esc` → to return to Command Mode  
+
+From command mode you can:
+
+- `:w` → Save  
+- `:q` → Quit  
+- `:wq` → Save and quit  
+- `:q!` → Quit without saving  
+
+---
+
+## ⚙️ Entering Execute Mode
+
+Execute mode is used to run file operations and advanced commands.
+
+### 🔹 Enter Execute Mode
+Press `:` (colon)
+
+---
+
+## 🛠 Executing Basic Commands
+
+### 🔹 File Operations
+- `:w` → Save file  
+- `:q` → Quit  
+- `:wq` → Save & Quit  
+- `:q!` → Force quit without saving  
+
+### 🔹 Searching
+- `/word` → Search downward  
+- `?word` → Search upward  
+- `n` → Next match  
+- `N` → Previous match  
+
+### 🔹 Line Numbering
+- `:set number` → Enable line numbers  
+- `:set nonumber` → Disable line numbers  
+
+---
+
+## 🔍 Entering Visual Mode
+
+Types of Visual Mode:
+
+- `v` → Select characters  
+- `V` → Select entire lines  
+- `CTRL + v` → Block selection  
+
+---
+
+## ✂️ Manipulating Text in Visual Mode
+
+After selecting text:
+
+- `d` → Delete selection  
+- `y` → Copy selection  
+- `p` → Paste  
+- `>` → Indent  
+- `<` → Remove indent  
+
+### 🔸 Example
 ```bash
-i
-Hello DevOps Engineers!
-Esc
+v
+(move cursor to select text)
+y
+p
