@@ -950,3 +950,671 @@ v
 (move cursor to select text)
 y
 p
+````
+
+# 👥 User and Permission Management in Linux
+
+## Day-9 📌 Overview
+User and permission management is crucial for Linux security and system administration.  
+DevOps engineers must understand how to manage users, groups, and file permissions effectively.
+
+---
+
+## 👤 Types of Users in Linux
+
+Linux has **three types of users**:
+
+### 🔹 1. Root User
+- **UID (User ID)**: 0  
+- **Privileges**: Full system access  
+- **Prompt**: `#` (hash)  
+- **Purpose**: System administration  
+- **Example**: `root@server:~#`  
+
+### 🔹 2. System Users
+- **UID Range**: 1-999  
+- **Purpose**: Used by system processes & services (not human users)  
+- **Examples**: `mysql`, `nginx`, `postgres`, `docker`  
+- **Prompt**: `$`  
+
+### 🔹 3. Regular Users
+- **UID Range**: 1000+  
+- **Purpose**: Human users who log into the system  
+- **Privileges**: Limited (only own files & directories)  
+- **Prompt**: `$` (dollar sign)  
+- **Example**: `rajat@server:~$`  
+
+---
+
+## 📊 Comparing User Types
+
+| User Type | UID Range | Purpose | Prompt |
+|-----------|-----------|---------|--------|
+| **Root** | 0 | Full system control | `#` |
+| **System** | 1-999 | Services & processes | `$` |
+| **Regular** | 1000+ | Normal users | `$` |
+
+---
+
+## 🔨 Using the `useradd` Command
+
+The `useradd` command creates new users in Linux.
+
+### 🔹 Basic Syntax
+```bash
+sudo useradd [options] username
+```
+
+### 🔹 Common Options
+- `-m` → Create home directory  
+- `-s /bin/bash` → Assign shell  
+- `-d /path` → Specify home directory  
+- `-g groupname` → Assign primary group  
+- `-G groupname` → Assign secondary groups  
+- `-u UID` → Specify user ID  
+- `-c "Real Name"` → Add comment/full name  
+
+---
+
+## 📝 Creating Users: Practical Examples
+
+### 🔸 Example 1: Create a simple user
+```bash
+sudo useradd rajat
+```
+**What happens?**
+- User `rajat` is created  
+- No home directory (unless `-m` is used)  
+
+---
+
+### 🔸 Example 2: Create user with home directory
+```bash
+sudo useradd -m rajat
+```
+**What happens?**
+- User `rajat` is created  
+- Home directory `/home/rajat` is created automatically  
+
+---
+
+### 🔸 Example 3: Create user with shell and comment
+```bash
+sudo useradd -m -s /bin/bash -c "Rajat Kumar" rajat
+```
+**What happens?**
+- User `rajat` created  
+- Home directory: `/home/rajat`  
+- Shell: `/bin/bash`  
+- Full name: "Rajat Kumar"  
+
+---
+
+### 🔸 Example 4: Create user with specific UID
+```bash
+sudo useradd -m -u 1500 devops_user
+```
+**What happens?**
+- User created with custom UID 1500  
+
+---
+
+### 🔸 Example 5: Create user and assign to group
+```bash
+sudo useradd -m -g developers -G docker,sudo alice
+```
+**What happens?**
+- User `alice` created  
+- Primary group: `developers`  
+- Secondary groups: `docker`, `sudo`  
+
+---
+
+## 🔐 Setting User Passwords
+
+After creating a user, you must set a password.
+
+### 🔹 Using the `passwd` Command
+
+#### Syntax:
+```bash
+sudo passwd username
+```
+
+---
+
+### 🔸 Example 1: Set password for a user
+```bash
+sudo passwd rajat
+```
+**Output:**
+```
+New password: [type password]
+Retype new password: [confirm password]
+passwd: password updated successfully
+```
+
+---
+
+### 🔸 Example 2: Force user to change password on first login
+```bash
+sudo passwd -e rajat
+```
+**What happens?**
+- User must change password on next login  
+
+---
+
+### 🔸 Example 3: Lock a user account
+```bash
+sudo passwd -l john
+```
+**What happens?**
+- User `john` cannot login  
+- Password is locked with `!`  
+
+---
+
+### 🔸 Example 4: Unlock a user account
+```bash
+sudo passwd -u john
+```
+**What happens?**
+- User `john` can login again  
+
+---
+
+## 👥 Managing User Groups
+
+Groups are used to organize users and assign permissions collectively.
+
+### 🔹 Viewing Groups
+```bash
+cat /etc/group
+```
+**Output:**
+```
+root:x:0:
+sudo:x:27:rajat,alice
+docker:x:999:rajat
+developers:x:1001:alice,bob
+```
+
+---
+
+### 🔹 Creating Groups
+```bash
+sudo groupadd groupname
+```
+
+#### 🔸 Example 1: Create a simple group
+```bash
+sudo groupadd developers
+```
+
+#### 🔸 Example 2: Create a group with specific GID
+```bash
+sudo groupadd -g 2000 devops_team
+```
+
+---
+
+### 🔹 Adding User to Group
+
+#### Syntax:
+```bash
+sudo usermod -aG groupname username
+```
+
+#### 🔸 Example 1: Add user to sudo group
+```bash
+sudo usermod -aG sudo rajat
+```
+**What happens?**
+- User `rajat` can now run commands with `sudo`  
+
+---
+
+#### 🔸 Example 2: Add user to docker group
+```bash
+sudo usermod -aG docker rajat
+```
+**What happens?**
+- User `rajat` can run Docker commands without `sudo`  
+
+---
+
+#### 🔸 Example 3: Add user to multiple groups
+```bash
+sudo usermod -aG docker,developers,sudo rajat
+```
+**What happens?**
+- User `rajat` added to three groups  
+
+---
+
+### 🔹 Viewing User's Groups
+```bash
+groups username
+```
+
+#### 🔸 Example:
+```bash
+groups rajat
+```
+**Output:**
+```
+rajat : rajat docker developers sudo
+```
+
+---
+
+### 🔹 Removing User from Group
+```bash
+sudo delgroup username groupname
+```
+
+#### 🔸 Example:
+```bash
+sudo delgroup rajat docker
+```
+**What happens?**
+- User `rajat` removed from `docker` group  
+
+---
+
+## 🗑️ Removing Users
+
+### 🔹 Delete User (keep home directory)
+```bash
+sudo userdel username
+```
+
+#### 🔸 Example:
+```bash
+sudo userdel john
+```
+**What happens?**
+- User `john` deleted  
+- Home directory `/home/john` still exists  
+
+---
+
+### 🔹 Delete User with Home Directory
+```bash
+sudo userdel -r username
+```
+
+#### 🔸 Example:
+```bash
+sudo userdel -r john
+```
+**What happens?**
+- User `john` deleted  
+- Home directory `/home/john` deleted  
+
+---
+
+## 📄 Introduction to Affected Files
+
+User and group information is stored in specific files:
+
+### 🔹 `/etc/passwd`
+Stores user account information.
+
+#### 🔸 Example:
+```bash
+cat /etc/passwd
+```
+
+**Output:**
+```
+root:x:0:0:root:/root:/bin/bash
+rajat:x:1000:1000:Rajat Kumar:/home/rajat:/bin/bash
+john:x:1001:1001:John Doe:/home/john:/bin/bash
+mysql:x:111:113:MySQL Server:/var/lib/mysql:/bin/false
+```
+
+**Format:**
+```
+username:x:UID:GID:Full Name:Home Directory:Shell
+```
+
+---
+
+### 🔹 `/etc/shadow`
+Stores encrypted passwords (only root can read).
+
+#### 🔸 View shadow file:
+```bash
+sudo cat /etc/shadow
+```
+
+**Output:**
+```
+root:!:18305:0:99999:7:::
+rajat:$6$abc123....:18305:0:99999:7:::
+john:!:18305:0:99999:7:::
+```
+
+---
+
+### 🔹 `/etc/group`
+Stores group information.
+
+#### 🔸 Example:
+```bash
+cat /etc/group
+```
+
+**Output:**
+```
+root:x:0:
+sudo:x:27:rajat,alice
+docker:x:999:rajat
+developers:x:1001:alice,bob
+```
+
+**Format:**
+```
+groupname:x:GID:members
+```
+
+---
+
+## 🏠 User Home Directories
+
+Each user has a personal home directory.
+
+### 🔹 Default Home Directory Location
+```bash
+/home/username
+```
+
+### 🔹 Special Home Directories
+- **Root user**: `/root`  
+- **Regular users**: `/home/username`  
+- **System users**: Varies (e.g., `/var/lib/mysql` for mysql)  
+
+---
+
+### 🔸 Example: View your home directory
+```bash
+pwd
+```
+**Output (if logged in as rajat):**
+```
+/home/rajat
+```
+
+---
+
+### 🔸 Example: Go to home directory
+```bash
+cd ~
+```
+
+---
+
+### 🔸 Example: List files in home directory
+```bash
+ls -la ~
+```
+
+---
+
+## ⚙️ Configuration Files
+
+Key configuration files for user & group management:
+
+### 🔹 `/etc/login.defs`
+Controls default settings for user creation.
+
+### 🔹 `/etc/default/useradd`
+Stores default values for the `useradd` command.
+
+#### 🔸 View defaults:
+```bash
+cat /etc/default/useradd
+```
+
+**Output:**
+```
+GROUP=100
+HOME=/home
+SHELL=/bin/sh
+SKEL=/etc/skel
+```
+
+---
+
+## 🔄 Switching Between Users in Linux
+
+### 🔹 Using the `su` Command
+
+`su` = **switch user**
+
+#### Syntax:
+```bash
+su [username]
+```
+
+---
+
+### 🔸 Example 1: Switch to root user
+```bash
+su
+```
+**What happens?**
+- Prompts for root password  
+- Once authenticated, you become root  
+- Prompt changes to `#`  
+
+---
+
+### 🔸 Example 2: Switch to specific user
+```bash
+su rajat
+```
+**What happens?**
+- You switch to user `rajat`  
+- Prompts for rajat's password  
+- Prompt shows `rajat@hostname:~$`  
+
+---
+
+### 🔸 Example 3: Login as user with login shell
+```bash
+su - rajat
+```
+**What happens?**
+- Switches to `rajat`  
+- Loads rajat's environment variables  
+- Better for security  
+
+---
+
+### 🔹 Exit from switched user
+```bash
+exit
+```
+**What happens?**
+- Returns to previous user  
+
+---
+
+## 🦸 Using the `sudo` Command
+
+`sudo` = **superuser do**
+
+Allows regular users to run commands with elevated privileges **without switching users**.
+
+### 🔹 Basic Syntax
+```bash
+sudo command
+```
+
+---
+
+### 🔸 Example 1: Run a command as root
+```bash
+sudo apt update
+```
+**What happens?**
+- Command runs with root privileges  
+- Prompts for current user's password (not root)  
+
+---
+
+### 🔸 Example 2: Create a file as root
+```bash
+sudo touch /etc/myconfig.conf
+```
+**What happens?**
+- File created in `/etc` with root ownership  
+- You remain logged in as regular user  
+
+---
+
+### 🔸 Example 3: Edit a system file
+```bash
+sudo nano /etc/hostname
+```
+**What happens?**
+- Opens file editor with root privileges  
+- You can save changes to protected files  
+
+---
+
+### 🔹 Checking sudo privileges
+```bash
+sudo -l
+```
+**Output example:**
+```
+User rajat may run the following commands on server:
+    (ALL) ALL
+```
+
+---
+
+## 📋 Comparing `su` vs `sudo`
+
+| Feature | `su` | `sudo` |
+|---------|------|-------|
+| **Switches user?** | Yes (full switch) | No (runs single command) |
+| **Password** | Target user's password | Current user's password |
+| **Overhead** | High (new shell) | Low (single command) |
+| **Security** | Less secure | More secure |
+| **Log trail** | Minimal | Detailed logging |
+| **Use case** | Full system access | One-off privileged tasks |
+
+---
+
+## ⭐ Real-World DevOps Scenarios
+
+### 🔸 Scenario 1: Add a new DevOps engineer to the team
+```bash
+# Create user
+sudo useradd -m -s /bin/bash -c "Alice DevOps" alice
+
+# Set password
+sudo passwd alice
+
+# Add to docker group (for container work)
+sudo usermod -aG docker alice
+
+# Add to sudo group (for admin access)
+sudo usermod -aG sudo alice
+
+# Verify
+groups alice
+```
+
+---
+
+### 🔸 Scenario 2: Create a deployment user for CI/CD
+```bash
+# Create deployment user
+sudo useradd -m -s /bin/bash deployer
+
+# Set password
+sudo passwd deployer
+
+# Add to docker group
+sudo usermod -aG docker deployer
+
+# Allow sudo without password (add to sudoers)
+# Note: Use 'visudo' for safe editing
+```
+
+---
+
+### 🔸 Scenario 3: Remove a user after they leave
+```bash
+# Remove user and home directory
+sudo userdel -r john
+
+# Remove from all groups (if not deleted)
+# Already handled by userdel -r
+```
+
+---
+
+### 🔸 Scenario 4: Give temporary sudo access
+```bash
+# Add user to sudo group
+sudo usermod -aG sudo contractor
+
+# After work is done, remove
+sudo delgroup contractor sudo
+```
+
+---
+
+## 🎯 Key Takeaways
+
+✅ **Root user** (UID 0) has full system access  
+✅ **System users** (1-999) run background services  
+✅ **Regular users** (1000+) are human users  
+✅ Use `useradd -m -s /bin/bash` to create users properly  
+✅ Always set passwords with `sudo passwd`  
+✅ Manage groups with `usermod -aG`  
+✅ Use `sudo` for security (not `su`)  
+✅ Check `/etc/passwd`, `/etc/shadow`, `/etc/group` for user info  
+
+---
+
+## 📝 Quick Reference Commands
+
+```bash
+# Create user with home directory
+sudo useradd -m username
+
+# Set password
+sudo passwd username
+
+# Add user to group
+sudo usermod -aG groupname username
+
+# View user's groups
+groups username
+
+# Create a group
+sudo groupadd groupname
+
+# Delete user (keep home)
+sudo userdel username
+
+# Delete user (remove home)
+sudo userdel -r username
+
+# Switch user
+su - username
+
+# Run command as sudo
+sudo command
+
+# Check sudo privileges
+sudo -l
+```
