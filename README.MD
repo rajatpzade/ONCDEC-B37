@@ -1618,3 +1618,937 @@ sudo command
 # Check sudo privileges
 sudo -l
 ```
+// ...existing code...
+
+---
+
+# 🔐 Password Security and Advanced User Management
+
+## Day-10 📌 Overview
+Password security is the foundation of Linux system security.  
+Understanding password policies, account locking, and advanced group management is essential for DevOps engineers.
+
+---
+
+## 🔑 Importance of Password Security
+
+### Why Strong Passwords Matter?
+- **Prevents unauthorized access** to systems and data  
+- **Protects sensitive information** from attackers  
+- **Ensures compliance** with security standards  
+- **Reduces risk** of data breaches  
+- **Maintains system integrity** in production environments  
+
+### 🔸 Strong Password Characteristics
+- Minimum **12 characters** long  
+- Mix of **uppercase, lowercase, numbers, and symbols**  
+- **Not based on dictionary words**  
+- **Not easily guessable** (avoid birthdays, names)  
+- **Unique** (different for each account)  
+
+### ⚠️ Common Password Mistakes to Avoid
+- Using simple passwords like `password123`  
+- Reusing passwords across multiple accounts  
+- Writing passwords on sticky notes  
+- Sharing passwords with colleagues  
+- Using default passwords  
+
+---
+
+## 🔐 Using the `passwd` Command
+
+The `passwd` command is the primary tool for password management in Linux.
+
+### 🔹 Basic Syntax
+```bash
+sudo passwd username
+```
+
+---
+
+### 🔸 Example 1: Change your own password
+```bash
+passwd
+```
+**What happens?**
+- You're prompted for current password  
+- Then prompted to enter new password twice  
+- Output: `passwd: password updated successfully`
+
+---
+
+### 🔸 Example 2: Change another user's password (as root)
+```bash
+sudo passwd rajat
+```
+**What happens?**
+- Root can change any user's password  
+- Doesn't require old password verification  
+
+---
+
+### 🔸 Example 3: Force password change on next login
+```bash
+sudo passwd -e rajat
+```
+**What happens?**
+- User `rajat` must change password at next login  
+- Login prompt: `You are required to change your password immediately`  
+
+---
+
+### 🔸 Example 4: Lock a user account
+```bash
+sudo passwd -l rajat
+```
+**What happens?**
+- User `rajat` cannot login  
+- A `!` is added to the password hash in `/etc/shadow`  
+- Error message: `Authentication token manipulation error`  
+
+---
+
+### 🔸 Example 5: Unlock a user account
+```bash
+sudo passwd -u rajat
+```
+**What happens?**
+- User `rajat` can login again  
+- The `!` prefix is removed from password hash  
+
+---
+
+### 🔸 Example 6: Disable login without removing password
+```bash
+sudo passwd -l rajat
+sudo usermod -s /usr/sbin/nologin rajat
+```
+**What happens?**
+- User cannot login interactively  
+- But can still be used for system processes  
+
+---
+
+## 📋 Password Policy Settings
+
+Password policies enforce security standards across the system.
+
+### 🔹 `/etc/login.defs` Configuration
+This file contains default password policies.
+
+#### 🔸 View password policies:
+```bash
+cat /etc/login.defs | grep PASS
+```
+
+**Output:**
+```
+PASS_MAX_DAYS   99999
+PASS_MIN_DAYS   0
+PASS_WARN_AGE   7
+PASS_MIN_LEN    5
+```
+
+### 🔹 Understanding Policy Fields
+
+| Field | Meaning | Default | Example |
+|-------|---------|---------|---------|
+| `PASS_MAX_DAYS` | Max days password valid | 99999 | 90 days |
+| `PASS_MIN_DAYS` | Min days before changing | 0 | 1 day |
+| `PASS_WARN_AGE` | Days before expiry warning | 7 | 14 days |
+| `PASS_MIN_LEN` | Minimum password length | 5 | 12 chars |
+
+---
+
+### 🔸 Example 1: Set password to expire every 90 days
+Edit `/etc/login.defs`:
+```bash
+sudo nano /etc/login.defs
+```
+
+Change:
+```
+PASS_MAX_DAYS   90
+```
+
+---
+
+### 🔸 Example 2: Require minimum 12 character passwords
+```bash
+sudo nano /etc/login.defs
+```
+
+Change:
+```
+PASS_MIN_LEN    12
+```
+
+---
+
+### 🔹 Using `pam_pwquality` for Strong Passwords
+
+Install password quality checker:
+```bash
+sudo apt install libpam-pwquality
+```
+
+---
+
+## 🔒 Account Locking and Expiration
+
+### 🔹 Using `chage` Command
+
+`chage` = **change age** - manages password expiration and account lockout.
+
+#### Syntax:
+```bash
+sudo chage [options] username
+```
+
+---
+
+### 🔸 Example 1: View password aging info
+```bash
+sudo chage -l rajat
+```
+
+**Output:**
+```
+Last password change                    : Dec 08, 2025
+Password expires                        : never
+Password inactive                       : never
+Account expires                         : never
+Minimum number of days between changes  : 0
+Maximum number of days between changes  : 99999
+Number of days of warning before expiry : 7
+```
+
+---
+
+### 🔸 Example 2: Set password to expire in 90 days
+```bash
+sudo chage -M 90 rajat
+```
+**What happens?**
+- Password must be changed every 90 days  
+
+---
+
+### 🔸 Example 3: Set minimum days between password changes
+```bash
+sudo chage -m 1 rajat
+```
+**What happens?**
+- User must wait at least 1 day before changing password again  
+
+---
+
+### 🔸 Example 4: Set password expiration warning
+```bash
+sudo chage -W 14 rajat
+```
+**What happens?**
+- User gets warning 14 days before password expires  
+
+---
+
+### 🔸 Example 5: Set account expiration date
+```bash
+sudo chage -E 2026-12-31 rajat
+```
+**What happens?**
+- Account `rajat` will be disabled on December 31, 2026  
+- User cannot login after this date  
+
+---
+
+### 🔸 Example 6: Set all password policies at once
+```bash
+sudo chage -M 90 -m 1 -W 14 -I 7 rajat
+```
+**What happens?**
+- Max days: 90  
+- Min days: 1  
+- Warning: 14 days  
+- Inactive: 7 days  
+
+---
+
+## 📄 Understanding `/etc/shadow` Fields
+
+The `/etc/shadow` file stores encrypted passwords and expiration details.
+
+### 🔹 View shadow file (as root only):
+```bash
+sudo cat /etc/shadow
+```
+
+**Output:**
+```
+root:$6$xyz123abc....$:18305:0:99999:7:0:0:
+rajat:$6$abc456def....$:18305:0:99999:7:7:18310:
+john:!:18305:0:99999:7:0:0:
+```
+
+---
+
+### 🔹 Shadow File Format
+```
+username:password_hash:lastchange:min:max:warn:inactive:expire:reserved
+```
+
+---
+
+### 🔹 Understanding Each Field
+
+| Field | Position | Meaning | Example |
+|-------|----------|---------|---------|
+| Username | 1 | User account name | `rajat` |
+| Password Hash | 2 | Encrypted password | `$6$...` |
+| Last Change | 3 | Days since 1970-01-01 | `18305` |
+| Min Days | 4 | Min days before change | `0` |
+| Max Days | 5 | Max days password valid | `99999` |
+| Warning Days | 6 | Days before warning | `7` |
+| Inactive Days | 7 | Days after expiry to lock | `7` |
+| Expire Date | 8 | Account expiration days | `18310` |
+| Reserved | 9 | Reserved field | (blank) |
+
+---
+
+### 🔸 Example: Decoding a shadow entry
+```
+rajat:$6$abc123...:18305:1:90:14:7:18310:
+```
+
+**Meaning:**
+- Username: `rajat`  
+- Password: Encrypted (starts with `$6$` = SHA-512)  
+- Last changed: Day 18305 (around Dec 2024)  
+- Must wait 1 day before next change  
+- Password expires every 90 days  
+- Warning given 14 days before expiry  
+- Account locked 7 days after expiry  
+- Account expires on day 18310 (around Jan 2025)  
+
+---
+
+## ⏰ Using `chage` Command (Advanced)
+
+### 🔹 Common `chage` Options
+
+| Option | Meaning |
+|--------|---------|
+| `-l` | List password aging info |
+| `-M` | Maximum days password valid |
+| `-m` | Minimum days before change |
+| `-W` | Warning days before expiry |
+| `-I` | Inactive days after expiry |
+| `-E` | Account expiration date |
+| `-d` | Last password change date |
+
+---
+
+### 🔸 Example 1: Force password change immediately
+```bash
+sudo chage -d 0 rajat
+```
+**What happens?**
+- User must change password on next login  
+
+---
+
+### 🔸 Example 2: View all users with expired passwords
+```bash
+sudo chage -l rajat | grep "Password expires"
+```
+
+---
+
+### 🔸 Example 3: Set account to never expire
+```bash
+sudo chage -E -1 rajat
+```
+**What happens?**
+- Account will never expire  
+
+---
+
+### 🔸 Example 4: Create comprehensive password policy
+```bash
+sudo chage -M 90 -m 1 -W 14 -I 7 -E 2026-12-31 rajat
+```
+
+**Policy Details:**
+- Change password every 90 days  
+- Wait 1 day minimum between changes  
+- Warn 14 days before expiry  
+- Lock after 7 days of inactivity  
+- Account expires Dec 31, 2026  
+
+---
+
+# 👥 Introduction to Linux Groups (Advanced)
+
+Groups are essential for managing permissions and organizing users efficiently.
+
+---
+
+## 📋 Fields of `/etc/group`
+
+The `/etc/group` file stores group information.
+
+### 🔹 View group file:
+```bash
+cat /etc/group
+```
+
+**Output:**
+```
+root:x:0:
+sudo:x:27:rajat,alice
+docker:x:999:rajat,bob
+developers:x:1001:alice,john,rajat
+```
+
+---
+
+### 🔹 Group File Format
+```
+groupname:password:GID:members
+```
+
+---
+
+### 🔹 Understanding Each Field
+
+| Field | Position | Meaning | Example |
+|-------|----------|---------|---------|
+| Group Name | 1 | Name of group | `developers` |
+| Password | 2 | Group password (x = shadow) | `x` |
+| GID | 3 | Group ID number | `1001` |
+| Members | 4 | Users in group (comma-separated) | `alice,john,rajat` |
+
+---
+
+### 🔸 Example: Decoding a group entry
+```
+developers:x:1001:alice,john,rajat
+```
+
+**Meaning:**
+- Group name: `developers`  
+- Password: Stored in `/etc/gshadow` (indicated by `x`)  
+- GID: 1001 (unique identifier)  
+- Members: `alice`, `john`, and `rajat` are members  
+
+---
+
+## 📄 Fields of `/etc/gshadow`
+
+The `/etc/gshadow` file stores encrypted group passwords and group administrators.
+
+### 🔹 View gshadow file (root only):
+```bash
+sudo cat /etc/gshadow
+```
+
+**Output:**
+```
+root:::
+sudo:*::rajat,alice
+docker:!::rajat,bob
+developers:!::alice,john
+```
+
+---
+
+### 🔹 Gshadow File Format
+```
+groupname:password:administrators:members
+```
+
+---
+
+### 🔹 Understanding Each Field
+
+| Field | Position | Meaning | Example |
+|-------|----------|---------|---------|
+| Group Name | 1 | Name of group | `developers` |
+| Password | 2 | Encrypted group password | `!` or `*` |
+| Administrators | 3 | Who can manage group | `alice,john` |
+| Members | 4 | Group members (secondary) | `rajat,bob` |
+
+---
+
+### 🔸 Password Symbols in gshadow
+
+| Symbol | Meaning |
+|--------|---------|
+| `*` | No group password set |
+| `!` | Group password locked |
+| `$6$...` | Encrypted password (SHA-512) |
+| (blank) | No password set |
+
+---
+
+## 🎯 Types of Groups
+
+### 🔹 1. Primary Group
+- Automatically created when user is created  
+- User's primary group (found in `/etc/passwd`)  
+- Has same name as username  
+- One user = one primary group  
+
+#### 🔸 Example:
+```bash
+cat /etc/passwd | grep rajat
+```
+**Output:**
+```
+rajat:x:1000:1000:Rajat Kumar:/home/rajat:/bin/bash
+```
+**Meaning:** GID 1000 is rajat's primary group
+
+---
+
+### 🔹 2. Secondary Groups
+- Additional groups a user belongs to  
+- Provides extra permissions  
+- Can be shared among users  
+- One user = multiple secondary groups  
+
+#### 🔸 Example:
+```bash
+groups rajat
+```
+**Output:**
+```
+rajat docker sudo developers
+```
+**Meaning:** 
+- Primary: `rajat`  
+- Secondary: `docker`, `sudo`, `developers`  
+
+---
+
+### 🔹 3. System Groups
+- GID: 0-999  
+- Used for system services  
+- Examples: `root`, `bin`, `daemon`, `www-data`  
+
+#### 🔸 View system groups:
+```bash
+cat /etc/group | head -20
+```
+
+---
+
+## ➕ Creating and Deleting Groups
+
+### 🔹 Creating Groups
+
+#### Syntax:
+```bash
+sudo groupadd [options] groupname
+```
+
+---
+
+### 🔸 Example 1: Create a simple group
+```bash
+sudo groupadd developers
+```
+**What happens?**
+- Group `developers` created with auto-assigned GID  
+
+---
+
+### 🔸 Example 2: Create group with specific GID
+```bash
+sudo groupadd -g 2000 devops_team
+```
+**What happens?**
+- Group created with GID 2000  
+
+---
+
+### 🔸 Example 3: Create system group
+```bash
+sudo groupadd -r ci_system
+```
+**What happens?**
+- Group created with system GID range (1-999)  
+
+---
+
+### 🔹 Deleting Groups
+
+#### Syntax:
+```bash
+sudo groupdel groupname
+```
+
+---
+
+### 🔸 Example 1: Delete a group
+```bash
+sudo groupdel developers
+```
+**What happens?**
+- Group `developers` is deleted  
+- Error if group is primary group of any user  
+
+---
+
+### 🔸 Example 2: Delete group and reassign users
+```bash
+# First remove users from group or change their primary group
+sudo usermod -g other_group username
+
+# Then delete group
+sudo groupdel developers
+```
+
+---
+
+## 🔧 Modifying Groups
+
+### 🔹 Using `groupmod` Command
+
+#### Syntax:
+```bash
+sudo groupmod [options] groupname
+```
+
+---
+
+### 🔸 Example 1: Change group name
+```bash
+sudo groupmod -n new_name old_name
+```
+**What happens?**
+- Group `old_name` renamed to `new_name`  
+
+#### 🔸 Example:
+```bash
+sudo groupmod -n backend developers
+```
+
+---
+
+### 🔸 Example 2: Change group GID
+```bash
+sudo groupmod -g 3000 developers
+```
+**What happens?**
+- Group `developers` GID changed to 3000  
+- Files still belong to old GID (needs manual fix)  
+
+---
+
+### 🔸 Example 3: Change group password
+```bash
+sudo groupmod -p encrypted_password developers
+```
+
+---
+
+## 👥 Managing Group Memberships
+
+### 🔹 Adding Users to Groups
+
+#### Syntax:
+```bash
+sudo usermod -aG groupname username
+```
+
+**Flag Meaning:**
+- `-a` = Append (add to existing groups)  
+- `-G` = Groups (specify additional groups)  
+- ⚠️ Without `-a`, user is REMOVED from other groups!  
+
+---
+
+### 🔸 Example 1: Add user to docker group
+```bash
+sudo usermod -aG docker rajat
+```
+**What happens?**
+- User `rajat` added to `docker` group  
+- Retains all other group memberships  
+
+---
+
+### 🔸 Example 2: Add user to multiple groups
+```bash
+sudo usermod -aG docker,sudo,developers rajat
+```
+**What happens?**
+- User `rajat` added to three groups at once  
+
+---
+
+### 🔸 Example 3: Replace all groups (without -a)
+```bash
+sudo usermod -G docker rajat
+```
+⚠️ **Warning!**
+- User `rajat` REMOVED from all groups except `docker`  
+- Can cause permission issues  
+- Always use `-aG` instead!  
+
+---
+
+### 🔹 Removing Users from Groups
+
+#### Syntax:
+```bash
+sudo delgroup username groupname
+```
+
+---
+
+### 🔸 Example 1: Remove user from docker group
+```bash
+sudo delgroup rajat docker
+```
+**What happens?**
+- User `rajat` removed from `docker` group  
+- Other groups remain unchanged  
+
+---
+
+### 🔸 Example 2: Remove user from multiple groups
+```bash
+sudo delgroup rajat docker
+sudo delgroup rajat sudo
+sudo delgroup rajat developers
+```
+
+---
+
+### 🔹 Verifying Group Membership
+
+#### Check user's groups:
+```bash
+groups rajat
+```
+**Output:**
+```
+rajat : rajat docker developers sudo
+```
+
+---
+
+#### Check group members:
+```bash
+getent group docker
+```
+**Output:**
+```
+docker:x:999:rajat,bob,alice
+```
+
+---
+
+## 🔍 Viewing and Editing Group Information
+
+### 🔹 Viewing Group Details
+
+#### All groups on system:
+```bash
+cat /etc/group
+```
+
+---
+
+#### Specific group info:
+```bash
+getent group developers
+```
+**Output:**
+```
+developers:x:1001:alice,john,rajat
+```
+
+---
+
+#### All groups for a user:
+```bash
+groups rajat
+```
+
+---
+
+#### Group ID of a user's primary group:
+```bash
+id rajat
+```
+**Output:**
+```
+uid=1000(rajat) gid=1000(rajat) groups=1000(rajat),999(docker),27(sudo),1001(developers)
+```
+
+---
+
+### 🔹 Editing Group Information Safely
+
+⚠️ **Never edit `/etc/group` or `/etc/gshadow` directly!**  
+Use proper commands instead:
+
+#### ✅ Correct Way:
+```bash
+sudo usermod -aG docker rajat
+sudo groupmod -n newname oldname
+sudo groupdel groupname
+```
+
+#### ❌ Wrong Way:
+```bash
+sudo nano /etc/group          # Don't do this!
+sudo vi /etc/gshadow          # Don't do this!
+```
+
+---
+
+### 🔹 Checking Group Syntax
+
+If you must edit manually, validate syntax:
+```bash
+sudo grpck
+```
+**Output:**
+```
+(no errors or errors listed)
+```
+
+---
+
+## ⭐ Real-World DevOps Scenarios
+
+### 🔸 Scenario 1: Onboard new DevOps engineer
+```bash
+# Create user
+sudo useradd -m -s /bin/bash -c "Bob Engineer" bob
+
+# Set password
+sudo passwd bob
+
+# Add to required groups
+sudo usermod -aG docker,sudo,developers bob
+
+# Set strong password policy
+sudo chage -M 90 -m 1 -W 14 -I 7 bob
+
+# Verify setup
+groups bob
+id bob
+```
+
+---
+
+### 🔸 Scenario 2: Create CI/CD deployment group
+```bash
+# Create group
+sudo groupadd cicd_team
+
+# Create deployment user
+sudo useradd -m -s /bin/bash deployer
+
+# Add user to group
+sudo usermod -aG cicd_team deployer
+
+# Set password policy (no expiration for automation)
+sudo chage -E -1 deployer
+
+# Verify
+getent group cicd_team
+```
+
+---
+
+### 🔸 Scenario 3: Enforce password policy company-wide
+```bash
+# Edit login.defs
+sudo nano /etc/login.defs
+
+# Change these values:
+# PASS_MAX_DAYS   90
+# PASS_MIN_DAYS   1
+# PASS_WARN_AGE   14
+# PASS_MIN_LEN    12
+
+# Apply to existing users
+for user in $(cut -d: -f1 /etc/passwd | grep -v root); do
+  sudo chage -M 90 -m 1 -W 14 $user
+done
+```
+
+---
+
+### 🔸 Scenario 4: Audit user accounts and cleanup
+```bash
+# List all users with expiration dates
+for user in $(cut -d: -f1 /etc/passwd); do
+  sudo chage -l $user | grep "Account expires"
+done
+
+# Remove inactive user
+sudo userdel -r old_contractor
+
+# Ensure group cleanup
+sudo groupdel unused_group
+```
+
+---
+
+## 🎯 Key Takeaways
+
+✅ Strong passwords are **foundation of security**  
+✅ Use `passwd -e` to force password change  
+✅ Use `passwd -l` to lock accounts  
+✅ Use `chage` for password expiration policies  
+✅ Always use `usermod -aG` (never omit `-a`)  
+✅ Primary group created automatically with user  
+✅ Secondary groups provide additional permissions  
+✅ Never edit `/etc/group` directly  
+✅ Use `groups` command to verify membership  
+✅ `getent` shows all groups on system  
+
+---
+
+## 📝 Quick Reference: Password & Group Commands
+
+```bash
+# PASSWORD COMMANDS
+passwd rajat                          # Change password
+sudo passwd -e rajat                  # Force change on login
+sudo passwd -l rajat                  # Lock account
+sudo passwd -u rajat                  # Unlock account
+sudo chage -l rajat                   # View password aging
+sudo chage -M 90 rajat                # Max 90 days
+sudo chage -E 2026-12-31 rajat        # Account expiration
+
+# GROUP COMMANDS
+sudo groupadd developers              # Create group
+sudo groupadd -g 2000 devops          # With specific GID
+sudo groupdel developers              # Delete group
+sudo groupmod -n newname oldname      # Rename group
+sudo groupmod -g 2000 developers      # Change GID
+
+# MEMBERSHIP COMMANDS
+sudo usermod -aG docker rajat         # Add to group
+sudo usermod -aG docker,sudo rajat    # Add to multiple
+sudo delgroup rajat docker            # Remove from group
+groups rajat                          # View user's groups
+getent group docker                   # View group members
+id rajat                              # Full user/group info
+
+# VIEWING COMMANDS
+cat /etc/passwd                       # All users
+cat /etc/group                        # All groups
+sudo cat /etc/shadow                  # Password hashes
+sudo cat /etc/gshadow                 # Group passwords
+```
+
+---
