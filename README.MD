@@ -2552,3 +2552,125 @@ sudo cat /etc/gshadow                 # Group passwords
 ```
 
 ---
+
+// ...existing code...
+
+---
+
+# 🔐 File Permissions in Linux — Deep Explanation
+
+## Importance of File Permissions
+- Protects data confidentiality, integrity and availability.  
+- Restricts who can read, modify, or execute files and directories.  
+- Prevents accidental or malicious changes.  
+- Essential for multi-user systems and services (security boundary).
+
+---
+
+## rwx: Read, Write, Execute (what they mean)
+- r (read) → For files: can view content. For directories: can list names.  
+- w (write) → For files: can modify or delete. For directories: can create/delete entries.  
+- x (execute) → For files: can execute as program/script. For directories: can enter (cd) and access inodes.
+
+Permission groups: owner (user), group, others (world). Permissions are applied in this order.
+
+---
+
+## How Permissions Are Displayed (ls -l)
+Run:
+```bash
+ls -l filename
+```
+Typical output:
+```
+-rw-r--r-- 1 rajat developers 1024 Dec 09 12:00 file.txt
+```
+Fields:
+1. Permission string (10 chars)
+2. Link count
+3. Owner
+4. Group
+5. Size
+6. Timestamp
+7. Name
+
+Permission string structure:
+- First char = file type (e.g., '-' file, 'd' dir, 'l' symlink)  
+- Next 9 chars = owner (rwx), group (rwx), others (rwx)
+
+---
+
+## Example: Breaking Down -rwxr-xr--
+Permission string:
+```
+-rwxr-xr--
+```
+Breakdown:
+- '-' → regular file  
+- Owner bits `rwx` → owner can read, write, execute (7)  
+- Group bits `r-x` → group can read and execute, not write (5)  
+- Others bits `r--` → others can only read (4)
+
+Numeric representation: 754 (7 owner + 5 group + 4 others).
+
+---
+
+## Numeric (octal) vs Symbolic Modes
+
+Numeric (octal):
+- r=4, w=2, x=1 → sum per class.
+- Example: `chmod 754 file` → owner=rwx, group=r-x, others=r--.
+
+Symbolic:
+- `chmod u=rwx,g=rx,o=r file`  
+- Append/remove: `chmod g+w file` (add write to group), `chmod o-x file` (remove execute for others).
+
+Examples:
+```bash
+chmod 644 file.txt     # owner rw-, group r--, others r--
+chmod 755 script.sh    # owner rwx, group rx, others rx (common for executables)
+chmod u+x script.sh    # add execute for owner
+chmod g-w file.txt     # remove write for group
+```
+
+---
+
+## Special Permission Bits (setuid, setgid, sticky)
+- setuid (s in owner execute position): file runs with owner's privileges. Numeric: 4xxx.
+  - Example: `chmod 4755 /usr/bin/someprog`
+- setgid (s in group execute position): file runs with group privileges or directory files created inherit group. Numeric: 2xxx.
+  - Example: `chmod 2755 /opt/shared`
+- sticky bit (t in others execute position): on directories, only owner of file/dir or root can delete entries. Numeric: 1xxx.
+  - Example: `/tmp` usually has `drwxrwxrwt` and `chmod 1777 /tmp`.
+
+Numeric example with special bits:
+```bash
+chmod 1755 public_dir    # sticky + rwxr-xr-x
+chmod 2775 team_dir      # setgid + rwxrwxr-x (new files inherit group)
+chmod 4755 su_prog       # setuid + rwxr-xr-x
+```
+
+---
+
+## File Types (first char in ls -l)
+Symbols and meanings:
+- - : regular file  
+- d : directory  
+- l : symbolic link  
+- b : block device (e.g., /dev/sda)  
+- c : character device (e.g., /dev/tty)  
+- s : socket (IPC, network communication)  
+- p : FIFO / named pipe
+
+Examples:
+```bash
+-rw-r--r--   regular file
+drwxr-xr-x   directory
+lrwxrwxrwx   symlink -> target
+brw-rw----   block device (usually in /dev)
+crw-rw----   character device
+srwxrwxrwx   socket
+prw-r--r--   named pipe (FIFO)
+```
+
+---
