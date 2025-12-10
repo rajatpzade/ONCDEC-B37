@@ -2674,3 +2674,152 @@ prw-r--r--   named pipe (FIFO)
 ```
 
 ---
+
+// ...existing code...
+
+---
+
+# Day-12 ✅ Managing Users and Permissions in Linux
+
+## Link Count Basics
+- Link count (second column after permissions in ls -l) shows how many directory entries point to the same inode.
+- For files: link count = number of hard links to that file (default 1).
+- For directories: link count = number of subdirectories + 2 (for "." and "..").
+
+Example:
+```bash
+ls -l file.txt
+# -rw-r--r-- 2 rajat users 1024 Dec 10 12:00 file.txt   # link count = 2 (two hard links)
+```
+
+## Link Count for Directories
+- A directory's link count increases by 1 when a new subdirectory is created inside it.
+- Example:
+```bash
+mkdir project
+ls -ld project        # drwxr-xr-x 2 rajat users ...
+mkdir project/src
+ls -ld project        # drwxr-xr-x 3 rajat users ...  (now 3: ".", "..", "src")
+```
+
+## Link Count for Files
+- Creating a hard link increments the file's link count.
+- Remove a hard link with rm — file data removed only when link count reaches 0.
+```bash
+echo hello > a.txt
+ln a.txt b.txt
+ls -l a.txt b.txt
+# both show link count 2
+rm a.txt
+ls -l b.txt           # still accessible, link count 1
+```
+
+## Comparing Hard and Soft (Symbolic) Links
+- Hard link:
+  - Shares same inode and data as original file.
+  - Cannot cross filesystem boundaries.
+  - Cannot link to directories (without special privileges).
+  - Created with: ln target linkname
+- Soft (symbolic) link:
+  - Special file that points to target path.
+  - Can point across filesystems and to directories.
+  - If target removed, symlink becomes dangling.
+  - Created with: ln -s target linkname
+
+Examples:
+```bash
+# Hard link
+ln file.txt file_hard
+stat file.txt file_hard   # same inode number
+
+# Symbolic link
+ln -s /etc/nginx/nginx.conf nginx.conf.symlink
+ls -l nginx.conf.symlink  # shows -> /etc/nginx/nginx.conf
+readlink -f nginx.conf.symlink  # resolves target
+```
+
+## Importance of sudo for Privilege Escalation
+- sudo allows a permitted user to run commands as root or another user without logging in as that user.
+- Benefits:
+  - Avoids sharing root password.
+  - Fine-grained access control and auditing (sudo logs).
+  - Reduces time spent in a full root shell, minimizing accidental damage.
+
+## Difference Between Regular User Commands and sudo Commands
+- Regular user:
+  - Runs with user's UID/GID and permissions.
+  - Cannot modify files owned by root or perform privileged ops.
+- Using sudo:
+  - Command executes with elevated privileges (usually root).
+  - Prompts for user's password (not root) by default.
+  - Environment may differ (use sudo -i or sudo -H to get a root-like env).
+  - sudo logs commands to syslog/journal for audit.
+
+Examples:
+```bash
+# regular user cannot edit /etc/hosts
+nano /etc/hosts        # permission denied
+
+# with sudo
+sudo nano /etc/hosts  # allowed if user in sudoers
+```
+
+## Configuring sudo Access
+- Always edit sudoers via visudo to avoid syntax errors:
+```bash
+sudo visudo
+```
+- Add a user to sudo group (Debian/Ubuntu):
+```bash
+sudo usermod -aG sudo rajat
+```
+- Example sudoers entries:
+```text
+# Allow rajat to run any command as any user
+rajat ALL=(ALL) ALL
+
+# Allow user to run specific commands without password
+rajat ALL=(ALL) NOPASSWD: /usr/bin/systemctl, /usr/bin/restart-service
+```
+- Use group-based rules:
+```text
+%devops ALL=(ALL) ALL  # members of devops group have full sudo
+```
+
+## sudo Command Syntax and Examples
+- Basic:
+```bash
+sudo <command>
+```
+- Run a command as another user:
+```bash
+sudo -u otheruser <command>
+```
+- Get an interactive root shell (preserves login environment):
+```bash
+sudo -i
+```
+- Preserve environment variables:
+```bash
+sudo -E <command>
+```
+
+Practical examples:
+```bash
+sudo apt update                      # run package update as root
+sudo systemctl restart nginx         # restart service with elevated rights
+sudo -u postgres psql -c "\l"        # run psql as postgres user
+sudo visudo                           # safely edit sudoers
+```
+
+---
+
+## Quick Troubleshooting Tips
+- If sudo reports "user is not in the sudoers file", add the user to sudoers via a root account or a user who already has sudo.
+- Use sudo -l to list allowed commands for current user:
+```bash
+sudo -l
+```
+- Always validate sudoers syntax with visudo; wrong syntax can lock out sudo access.
+
+---
