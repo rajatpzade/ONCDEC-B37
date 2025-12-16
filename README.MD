@@ -2823,3 +2823,631 @@ sudo -l
 - Always validate sudoers syntax with visudo; wrong syntax can lock out sudo access.
 
 ---
+
+// ...existing code...
+
+---
+
+# Day-13 ✅ Automation and Data Handling in Linux
+
+## Overview of Archiving
+
+Archiving is the process of combining multiple files and directories into a single file (archive) for easier storage, transfer, and management.  
+Archives help in organizing data, reducing clutter, and preparing files for backup or distribution.
+
+### 🔹 Why Archive Files?
+- **Consolidation**: Multiple files → single archive file  
+- **Organization**: Group related files together  
+- **Transfer**: Easier to send one file instead of many  
+- **Backup**: Create snapshots of data  
+- **Space Management**: Prepare for compression  
+
+### 🔹 Common Archive Formats
+- **tar**: Tape Archive (most common in Linux)  
+- **zip**: Cross-platform (Windows/Linux/Mac)  
+- **rar**: Proprietary (less common in Linux)  
+
+---
+
+## Common Use Cases: Backups, Data Transfer, Organization
+
+### 🔹 1. Backups
+- Archive entire directories before system updates  
+- Create weekly backups of user data  
+- Store archives on external drives or cloud  
+
+### 🔹 2. Data Transfer
+- Bundle project files for sharing  
+- Send large datasets over network  
+- Upload archives to servers  
+
+### 🔹 3. Organization
+- Group log files by date  
+- Archive old projects  
+- Clean up scattered files  
+
+---
+
+## Creating and Extracting Archives with tar
+
+`tar` is the standard archiving tool in Linux. It doesn't compress by default — just bundles files.
+
+### 🔹 Basic Syntax
+```bash
+tar [options] archive-name.tar files/directories
+```
+
+### 🔹 Common Options
+- `-c` → Create archive  
+- `-x` → Extract archive  
+- `-v` → Verbose (show progress)  
+- `-f` → Specify filename  
+- `-t` → List archive contents  
+- `-r` → Append files to archive  
+- `-C` → Change to directory  
+
+---
+
+### 🔸 Creating Archives
+
+#### Example 1: Create simple archive
+```bash
+tar -cvf myfiles.tar file1.txt file2.txt folder/
+```
+**What happens?**
+- Creates `myfiles.tar` containing specified files  
+- `-c` create, `-v` verbose, `-f` filename  
+
+#### Example 2: Archive entire directory
+```bash
+tar -cvf backup.tar /home/user/documents/
+```
+**What happens?**
+- Archives the entire documents directory  
+
+#### Example 3: Archive with absolute paths
+```bash
+tar -cvf full-backup.tar /etc /var/log
+```
+**What happens?**
+- Includes full paths in archive  
+
+---
+
+### 🔸 Extracting Archives
+
+#### Example 1: Extract to current directory
+```bash
+tar -xvf myfiles.tar
+```
+**What happens?**
+- Extracts all files to current location  
+
+#### Example 2: Extract to specific directory
+```bash
+tar -xvf backup.tar -C /tmp/restore/
+```
+**What happens?**
+- Extracts to `/tmp/restore/` directory  
+
+#### Example 3: Extract specific files
+```bash
+tar -xvf archive.tar file1.txt folder/
+```
+**What happens?**
+- Only extracts specified files/folders  
+
+---
+
+## Managing Archive Contents
+
+### 🔹 Listing Archive Contents
+```bash
+tar -tvf archive.tar
+```
+**Output:**
+```
+-rw-r--r-- user/group    1024 2023-12-10 12:00 file1.txt
+drwxr-xr-x user/group       0 2023-12-10 12:00 folder/
+-rw-r--r-- user/group     512 2023-12-10 12:00 folder/file2.txt
+```
+
+### 🔹 Appending Files to Archive
+```bash
+tar -rvf archive.tar newfile.txt
+```
+**What happens?**
+- Adds `newfile.txt` to existing archive  
+
+### 🔹 Verifying Archive Integrity
+```bash
+tar -tvf archive.tar > /dev/null
+```
+**What happens?**
+- Checks if archive is readable (no output if OK)  
+
+---
+
+## Introduction to Compression
+
+Compression reduces file sizes by removing redundant data, making files smaller for storage and transfer.
+
+### 🔹 Why Compress?
+- **Save Storage Space**: Smaller files = more storage  
+- **Faster Transfers**: Less data to send over network  
+- **Backup Efficiency**: Compress before archiving  
+
+### 🔹 Lossless vs Lossy Compression
+- **Lossless**: No data loss (gzip, bzip2, xz)  
+- **Lossy**: Some data loss for better compression (images, audio)  
+
+---
+
+## The Role of Compression in Reducing File Sizes
+
+Compression algorithms identify patterns and replace them with shorter codes.
+
+### 🔹 How It Works
+- **Repetition**: "aaaaa" → "5a"  
+- **Patterns**: Common sequences replaced with symbols  
+- **Dictionaries**: Build reference tables  
+
+### 🔹 Compression Ratio
+- Original: 1MB  
+- Compressed: 300KB  
+- Ratio: 70% reduction  
+
+---
+
+## Differences Between Compression Formats
+
+| Format | Tool | Compression Ratio | Speed | Use Case |
+|--------|------|-------------------|-------|----------|
+| **gzip** | gzip/gunzip | Medium | Fast | General purpose |
+| **bzip2** | bzip2/bunzip2 | High | Medium | Better compression |
+| **xz** | xz/unxz | Highest | Slow | Maximum compression |
+
+### 🔹 gzip (.gz)
+- Fast compression/decompression  
+- Good for text files  
+- Used in HTTP compression  
+
+### 🔹 bzip2 (.bz2)
+- Better compression than gzip  
+- Slower but smaller files  
+- Good for large archives  
+
+### 🔹 xz (.xz)
+- Best compression ratio  
+- Slowest but smallest files  
+- Used for software packages  
+
+---
+
+## Using gzip and gunzip
+
+### 🔹 Compressing Files
+```bash
+gzip file.txt
+```
+**Result:** `file.txt.gz` (original deleted)
+
+### 🔹 Compressing with options
+```bash
+gzip -k file.txt    # Keep original file
+gzip -9 file.txt    # Maximum compression
+```
+
+### 🔹 Decompressing Files
+```bash
+gunzip file.txt.gz
+```
+**Result:** `file.txt` (compressed deleted)
+
+### 🔹 Decompress with options
+```bash
+gunzip -k file.txt.gz    # Keep compressed file
+gunzip -c file.txt.gz > output.txt    # Decompress to stdout
+```
+
+---
+
+## Using bzip2 and bunzip2
+
+### 🔹 Compressing Files
+```bash
+bzip2 file.txt
+```
+**Result:** `file.txt.bz2`
+
+### 🔹 Compressing with options
+```bash
+bzip2 -k file.txt    # Keep original
+bzip2 -9 file.txt    # Maximum compression
+```
+
+### 🔹 Decompressing Files
+```bash
+bunzip2 file.txt.bz2
+```
+**Result:** `file.txt`
+
+### 🔹 Decompress with options
+```bash
+bunzip2 -k file.txt.bz2    # Keep compressed
+bunzip2 -c file.txt.bz2 > output.txt    # To stdout
+```
+
+---
+
+## Using xz and unxz
+
+### 🔹 Compressing Files
+```bash
+xz file.txt
+```
+**Result:** `file.txt.xz`
+
+### 🔹 Compressing with options
+```bash
+xz -k file.txt    # Keep original
+xz -9 file.txt    # Maximum compression
+```
+
+### 🔹 Decompressing Files
+```bash
+unxz file.txt.xz
+```
+**Result:** `file.txt`
+
+### 🔹 Decompress with options
+```bash
+unxz -k file.txt.xz    # Keep compressed
+unxz -c file.txt.xz > output.txt    # To stdout
+```
+
+---
+
+## Combining Archiving and Compression
+
+`tar` can compress archives on the fly using options.
+
+### 🔹 tar with gzip
+```bash
+tar -czvf archive.tar.gz files/    # Create compressed archive
+tar -xzvf archive.tar.gz           # Extract compressed archive
+```
+
+### 🔹 tar with bzip2
+```bash
+tar -cjvf archive.tar.bz2 files/   # Create
+tar -xjvf archive.tar.bz2          # Extract
+```
+
+### 🔹 tar with xz
+```bash
+tar -cJvf archive.tar.xz files/    # Create
+tar -xJvf archive.tar.xz           # Extract
+```
+
+### 🔹 Compression Options Summary
+- `-z` → gzip  
+- `-j` → bzip2  
+- `-J` → xz  
+
+---
+
+## Practical: Compressing Files with tar, gzip, bzip2, xz
+
+### 🔸 Example 1: Compress directory with tar + gzip
+```bash
+tar -czvf project-backup.tar.gz /home/user/project/
+```
+**Result:** Single compressed file
+
+### 🔸 Example 2: Compress logs with tar + bzip2
+```bash
+tar -cjvf logs-backup.tar.bz2 /var/log/
+```
+**Result:** Smaller archive than gzip
+
+### 🔸 Example 3: Compress software with tar + xz
+```bash
+tar -cJvf software.tar.xz /opt/myapp/
+```
+**Result:** Maximum compression
+
+### 🔸 Example 4: Compress single file with gzip
+```bash
+gzip -k large-file.txt
+```
+**Result:** `large-file.txt.gz` + original kept
+
+### 🔸 Example 5: Compress multiple files with bzip2
+```bash
+bzip2 file1.txt file2.txt file3.txt
+```
+**Result:** `file1.txt.bz2`, `file2.txt.bz2`, `file3.txt.bz2`
+
+---
+
+## Practical: Decompressing Files with tar, gunzip, bunzip2, unxz
+
+### 🔸 Example 1: Extract tar.gz archive
+```bash
+tar -xzvf project-backup.tar.gz -C /tmp/
+```
+**Result:** Files extracted to `/tmp/`
+
+### 🔸 Example 2: Extract tar.bz2 archive
+```bash
+tar -xjvf logs-backup.tar.bz2
+```
+**Result:** Logs extracted to current directory
+
+### 🔸 Example 3: Extract tar.xz archive
+```bash
+tar -xJvf software.tar.xz -C /opt/
+```
+**Result:** Software extracted to `/opt/`
+
+### 🔸 Example 4: Decompress gzip file
+```bash
+gunzip large-file.txt.gz
+```
+**Result:** `large-file.txt`
+
+### 🔸 Example 5: Decompress bzip2 files
+```bash
+bunzip2 *.bz2
+```
+**Result:** All .bz2 files decompressed
+
+---
+
+## Introduction to CronTab
+
+CronTab is a time-based job scheduler in Linux. It runs commands or scripts at specified times/dates automatically.
+
+### 🔹 Why Use CronTab?
+- **Automation**: Run tasks without manual intervention  
+- **Scheduling**: Execute at specific times  
+- **Maintenance**: Regular backups, updates, cleanup  
+
+### 🔹 CronTab Components
+- **Cron Daemon**: `crond` service that runs in background  
+- **CronTab File**: User-specific schedule file  
+- **System CronTab**: `/etc/crontab` for system-wide jobs  
+
+---
+
+## Understanding The CronTab Syntax
+
+CronTab entries have 6 fields: minute, hour, day, month, weekday, command.
+
+### 🔹 Syntax Format
+```
+* * * * * command
+│ │ │ │ │
+│ │ │ │ └─ Day of week (0-7, 0=Sunday)
+│ │ │ └─── Month (1-12)
+│ │ └───── Day of month (1-31)
+│ └─────── Hour (0-23)
+└───────── Minute (0-59)
+```
+
+### 🔹 Special Characters
+- `*` → Any value  
+- `,` → List (1,3,5)  
+- `-` → Range (1-5)  
+- `/` → Step (*/5 = every 5 units)  
+
+### 🔹 Examples
+- `0 2 * * *` → Daily at 2:00 AM  
+- `*/15 * * * *` → Every 15 minutes  
+- `0 9-17 * * 1-5` → Weekdays 9 AM to 5 PM hourly  
+- `0 0 1 * *` → First day of every month  
+
+---
+
+## Creating and Managing Cron Jobs
+
+### 🔹 Editing CronTab
+```bash
+crontab -e    # Edit current user's crontab
+```
+
+### 🔹 Viewing CronTab
+```bash
+crontab -l    # List current user's jobs
+```
+
+### 🔹 Removing CronTab
+```bash
+crontab -r    # Remove all jobs
+```
+
+### 🔹 Editing System CronTab
+```bash
+sudo nano /etc/crontab    # System-wide jobs
+```
+
+---
+
+### 🔸 Creating Cron Jobs: Examples
+
+#### Example 1: Daily backup at 2 AM
+```bash
+crontab -e
+# Add this line:
+0 2 * * * tar -czf /home/user/daily-backup.tar.gz /home/user/documents/
+```
+
+#### Example 2: Run script every hour
+```bash
+# In crontab:
+0 * * * * /home/user/hourly-script.sh
+```
+
+#### Example 3: Weekly cleanup on Sundays
+```bash
+# In crontab:
+0 3 * * 0 rm -rf /tmp/old-files/
+```
+
+#### Example 4: Monthly report on 1st
+```bash
+# In crontab:
+0 6 1 * * /usr/local/bin/generate-report.sh
+```
+
+---
+
+## Automating Routine Tasks like Backups, System Updates, and Cleanup Scripts
+
+### 🔹 Automating Backups
+```bash
+# Daily database backup
+0 2 * * * mysqldump -u root -p'password' mydb > /backup/db-$(date +\%Y\%m\%d).sql
+
+# Weekly full backup
+0 3 * * 0 tar -czf /backup/weekly-$(date +\%Y\%m\%d).tar.gz /home/
+```
+
+### 🔹 System Updates
+```bash
+# Daily security updates
+0 4 * * * apt update && apt upgrade -y
+
+# Reboot after kernel update (if needed)
+0 5 * * * [ -f /var/run/reboot-required ] && reboot
+```
+
+### 🔹 Cleanup Scripts
+```bash
+# Clean temp files daily
+0 1 * * * rm -rf /tmp/* /var/tmp/*
+
+# Rotate logs weekly
+0 2 * * 0 logrotate /etc/logrotate.conf
+
+# Remove old backups (keep last 7)
+0 3 * * * find /backup -name "*.tar.gz" -mtime +7 -delete
+```
+
+---
+
+## ⭐ Real-World DevOps Scenarios
+
+### 🔸 Scenario 1: Automated Website Backup
+```bash
+# Backup web files and database daily
+0 2 * * * tar -czf /backup/web-$(date +\%Y\%m\%d).tar.gz /var/www/
+0 2 * * * mysqldump wordpress > /backup/db-$(date +\%Y\%m\%d).sql
+```
+
+### 🔸 Scenario 2: Log Rotation and Cleanup
+```bash
+# Rotate nginx logs daily
+0 0 * * * logrotate /etc/logrotate.d/nginx
+
+# Clean old logs weekly
+0 1 * * 0 find /var/log -name "*.gz" -mtime +30 -delete
+```
+
+### 🔸 Scenario 3: System Health Monitoring
+```bash
+# Check disk space hourly
+0 * * * * df -h | grep -E "9[0-9]%|100%" | mail -s "Disk Space Alert" admin@example.com
+
+# Restart service if down
+*/5 * * * * systemctl is-active --quiet nginx || systemctl restart nginx
+```
+
+### 🔸 Scenario 4: CI/CD Pipeline Trigger
+```bash
+# Poll for changes every 5 minutes
+*/5 * * * * cd /repo && git pull && ./build.sh
+```
+
+---
+
+## 🎯 Key Takeaways
+
+✅ **Archiving** bundles files for organization and transfer  
+✅ **tar** creates archives, combine with `-z/-j/-J` for compression  
+✅ **gzip** fast, **bzip2** better compression, **xz** best compression  
+✅ **CronTab** automates tasks with time-based scheduling  
+✅ Use `crontab -e` to edit, `crontab -l` to list jobs  
+✅ Test cron jobs manually before scheduling  
+✅ Always use absolute paths in cron commands  
+
+---
+
+## 📝 Quick Reference: Archiving, Compression & Cron Commands
+
+```bash
+# ARCHIVING WITH TAR
+tar -cvf archive.tar files/          # Create archive
+tar -xvf archive.tar                 # Extract archive
+tar -tvf archive.tar                 # List contents
+tar -rvf archive.tar newfile         # Append to archive
+
+# COMPRESSION
+gzip file.txt                        # Compress to .gz
+gunzip file.txt.gz                   # Decompress .gz
+bzip2 file.txt                       # Compress to .bz2
+bunzip2 file.txt.bz2                 # Decompress .bz2
+xz file.txt                          # Compress to .xz
+unxz file.txt.xz                     # Decompress .xz
+
+# TAR + COMPRESSION
+tar -czvf archive.tar.gz files/      # gzip
+tar -cjvf archive.tar.bz2 files/     # bzip2
+tar -cJvf archive.tar.xz files/      # xz
+tar -xzvf archive.tar.gz             # extract gzip
+tar -xjvf archive.tar.bz2            # extract bzip2
+tar -xJvf archive.tar.xz             # extract xz
+
+# CRONTAB
+crontab -e                           # Edit crontab
+crontab -l                           # List jobs
+crontab -r                           # Remove all jobs
+sudo crontab -e                      # Edit root crontab
+
+# CRON SYNTAX EXAMPLES
+* * * * * command                    # Every minute
+0 * * * * command                    # Every hour
+0 2 * * * command                    # Daily 2 AM
+0 0 * * 0 command                    # Weekly Sunday midnight
+0 0 1 * * command                    # Monthly 1st
+```
+
+---
+
+## 🚨 Common Issues & Troubleshooting
+
+### 🔹 Cron Job Not Running
+- Check `crontab -l` for syntax errors  
+- Use absolute paths in commands  
+- Check `/var/log/cron` or `journalctl -u cron` for errors  
+- Test command manually first  
+
+### 🔹 Archive Extraction Issues
+- Use correct extraction flags (`-xzf` for .tar.gz)  
+- Check permissions on target directory  
+- Ensure enough disk space  
+
+### 🔹 Compression Problems
+- `gzip` can't compress already compressed files well  
+- Use `file` command to check file types  
+- Check available memory for large files  
+
+---
+
+## 📚 Further Reading
+- `man tar`, `man gzip`, `man crontab`  
+- Cron expression generators online  
+- Linux backup best practices  
+
+---
